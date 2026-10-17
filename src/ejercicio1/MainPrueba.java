@@ -16,13 +16,23 @@ public class MainPrueba {
         mostrar("Por fecha limite (IDs esperados: 3, 1, 2, 5, 4)", gestor.consultarPorFecha());
         mostrar("Por prioridad (IDs esperados: 1, 2, 5, 4, 3)", gestor.consultarPorPrioridad());
 
-        for (int id : new int[] {2, 99}) {
-            Pedido encontrado = gestor.buscarPorId(id);
-            if (encontrado == null) {
-                System.out.println("Busqueda del ID " + id + ": Pedido no encontrado");
-            } else {
-                System.out.println("Busqueda del ID " + id + ": " + encontrado);
-            }
+
+        // Primera búsqueda: el ID 2 existe.
+        Pedido encontrado2 = gestor.buscarPorId(2);
+
+        // Si devuelve null, no se encontró. Si devuelve un pedido, lo mostramos.
+        if (encontrado2 == null) {
+            System.out.println("Busqueda del ID 2: Pedido no encontrado");
+        } else {
+            System.out.println("Busqueda del ID 2: " + encontrado2);
+        }
+
+        // Segunda búsqueda: el ID 99 no existe, por lo que esperamos recibir null.
+        Pedido encontrado99 = gestor.buscarPorId(99);
+        if (encontrado99 == null) {
+            System.out.println("Busqueda del ID 99: Pedido no encontrado");
+        } else {
+            System.out.println("Busqueda del ID 99: " + encontrado99);
         }
     }
 

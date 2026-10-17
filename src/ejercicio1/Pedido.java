@@ -3,12 +3,14 @@ package ejercicio1;
 import java.time.LocalDate;
 
 public final class Pedido {
+    // uso final porque no quiero modificar los datos luego de crearlos
     private final int id;
     private final String centroDestino;
     private final LocalDate fechaLimite;
     private final int prioridad;
     private final double pesoTotal;
 
+    // Constructor junto a las validaciones de datos.
     public Pedido(int id, String centroDestino, LocalDate fechaLimite, int prioridad, double pesoTotal) {
         if (centroDestino == null || centroDestino.trim().isEmpty()) {
             throw new IllegalArgumentException("El centro de destino es obligatorio.");
@@ -26,6 +28,7 @@ public final class Pedido {
         this.pesoTotal = pesoTotal;
     }
 
+    // getters
     public int getId() {
         return id;
     }
