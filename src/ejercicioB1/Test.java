@@ -40,6 +40,9 @@ public class Test {
 
         titulo("Caso 9: el punto de partida no es un deposito");
         probarInvalido(red, 2, Arrays.asList(3, 4));
+
+        titulo("Caso 10: un centro sin regreso al deposito (esperado: no existe recorrido)");
+        resolucion.resolver(red, 1, Arrays.asList(2, 8));
     }
 
     private static RedVial crearRed() {
@@ -51,6 +54,7 @@ public class Test {
         red.agregarUbicacion(new Ubicacion(5, "Centro Oeste", TipoUbicacion.CENTRO));
         red.agregarUbicacion(new Ubicacion(6, "Centro Plaza", TipoUbicacion.CENTRO));
         red.agregarUbicacion(new Ubicacion(7, "Centro Aislado", TipoUbicacion.CENTRO));
+        red.agregarUbicacion(new Ubicacion(8, "Centro Sin Salida", TipoUbicacion.CENTRO));
 
         red.agregarConexion(1, 2, 4);
         red.agregarConexion(2, 1, 6);
@@ -70,10 +74,11 @@ public class Test {
         red.agregarConexion(1, 6, 1);
         red.agregarConexion(6, 2, 1);
         red.agregarConexion(7, 1, 2);
+        red.agregarConexion(1, 8, 2);
         return red;
     }
 
-    private static RedVial crearRedAnillo() {
+    private static RedVial crearRedAnillo() { // Mismo procedimiento que en el flujo de Dijkstra
         RedVial red = new RedVial();
         red.agregarUbicacion(new Ubicacion(1, "Deposito Central", TipoUbicacion.DEPOSITO));
         for (int id = 2; id <= 9; id++) {

@@ -1,23 +1,20 @@
 package ejercicioB1;
 
 import algoritmos.BacktrackingRecorrido;
-import algoritmos.Dijkstra;
+import algoritmos.Floyd;
 import modelo.RedVial;
 import modelo.TipoUbicacion;
 import modelo.Ubicacion;
-import tda.GrafoTDA;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 public class Resolucion {
     private static final int MAXIMO_CENTROS = 8;
 
-    private Map<Integer, Map<Integer, Integer>> anterioresPorOrigen;
+    private Floyd floyd;
 
     public void resolver(RedVial red, int idDeposito, List<Integer> idsCentros) {
         validar(red, idDeposito, idsCentros);
@@ -56,40 +53,25 @@ public class Resolucion {
     }
 
     private int[][] matrizTiempos(RedVial red, List<Ubicacion> paradas) {
-        GrafoTDA grafo = red.construirGrafo();
+        floyd = new Floyd(red.construirGrafo());
         int cantidadParadas = paradas.size();
         int[][] tiempos = new int[cantidadParadas][cantidadParadas];
-        anterioresPorOrigen = new HashMap<>();
 
         for (int i = 0; i < cantidadParadas; i++) {
             int origen = paradas.get(i).getId();
-            Dijkstra dijkstra = new Dijkstra();
-            GrafoTDA caminosMinimos = dijkstra.ejecutar(grafo, origen);
-            anterioresPorOrigen.put(origen, dijkstra.getAnterior());
-
             for (int j = 0; j < cantidadParadas; j++) {
                 int destino = paradas.get(j).getId();
-                if (i == j) {
-                    tiempos[i][j] = 0;
-                } else if (caminosMinimos.existeArista(origen, destino)) {
-                    tiempos[i][j] = caminosMinimos.pesoArista(origen, destino);
-                } else {
-                    tiempos[i][j] = BacktrackingRecorrido.SIN_CAMINO;
-                }
+                tiempos[i][j] = (int) floyd.tiempoMinimo(origen, destino);
             }
         }
         return tiempos;
     }
 
     private List<Ubicacion> reconstruirTramo(RedVial red, int origen, int destino) {
-        Map<Integer, Integer> anterior = anterioresPorOrigen.get(origen);
         List<Ubicacion> tramo = new ArrayList<>();
-        int actual = destino;
-        while (actual != origen) {
-            tramo.add(0, red.getUbicacion(actual));
-            actual = anterior.get(actual);
+        for (int id : floyd.reconstruirRecorrido(origen, destino)) {
+            tramo.add(red.getUbicacion(id));
         }
-        tramo.add(0, red.getUbicacion(origen));
         return tramo;
     }
 
@@ -111,7 +93,7 @@ public class Resolucion {
             System.out.println("Tiempo total: " + backtracking.getMejorTiempo() + " minutos");
         }
 
-        System.out.println("Recorridos completos evaluados: " + backtracking.getRecorridosCompletos());
+        System.out.println("Nodos explorados: " + backtracking.getNodosExplorados());
         System.out.println("Ramas podadas: " + backtracking.getRamasPodadas());
     }
 
