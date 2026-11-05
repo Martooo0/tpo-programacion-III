@@ -20,6 +20,10 @@ public final class Lote {
         this.prioridad = prioridad;
     }
 
+    public Lote(int id, int peso) { // Se usa solo en el ejercicio B2.
+        this(id, peso, 0); // No importa la relación Valor / Prioridad, entonces la dejo en 0 para todos
+    }
+
     // getters
     public int getId() { return id; }
     public int getPeso() { return peso; }
